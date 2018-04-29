@@ -20,7 +20,7 @@
 2.app build.gradle
 
 `dependencies {
-	         compile 'com.github.zhangliangming:PreferencesProvider:v1.0'
+	         compile 'com.github.zhangliangming:PreferencesProvider:v1.1'
 	}`
 
 # 调用Demo #
