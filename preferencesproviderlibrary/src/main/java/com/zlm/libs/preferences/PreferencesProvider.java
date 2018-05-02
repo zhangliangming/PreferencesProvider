@@ -65,6 +65,12 @@ public abstract class PreferencesProvider extends ContentProvider {
     private String mDeletePath = "delete/*/*/";
     public static final int DELETE_CONTENT_URI_CODE = 106;
 
+    /**
+     *
+     */
+    private String mPutsPath = "puts";
+    public static final int PUTS_CONTENT_URI_CODE = 107;
+
     public abstract String getAuthorities();
 
 
@@ -73,7 +79,7 @@ public abstract class PreferencesProvider extends ContentProvider {
 
         String authorities = getAuthorities();
         //保存authorities
-        PreferencesUtils.putString(getContext(),AUTHORITIES_SPNAME,AUTHORITIES_KEY,authorities);
+        PreferencesUtils.putString(getContext(), AUTHORITIES_SPNAME, AUTHORITIES_KEY, authorities);
 
         mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         mUriMatcher.addURI(authorities, mStringPath, STRING_CONTENT_URI_CODE);
@@ -93,6 +99,8 @@ public abstract class PreferencesProvider extends ContentProvider {
 
         mUriMatcher.addURI(authorities, mDeletePath, DELETE_CONTENT_URI_CODE);
 
+        mUriMatcher.addURI(authorities, mPutsPath, PUTS_CONTENT_URI_CODE);
+
         return false;
     }
 
@@ -100,15 +108,8 @@ public abstract class PreferencesProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Model model = getModel(uri);
         if (model == null) return null;
-        Cursor cursor = null;
         int code = mUriMatcher.match(uri);
-        switch (code) {
-            case UriMatcher.NO_MATCH:
-                break;
-            default:
-                cursor = buildCursor(getContext(), model, code);
-                break;
-        }
+        Cursor cursor = buildCursor(getContext(), model, code);
         return cursor;
     }
 
@@ -122,12 +123,9 @@ public abstract class PreferencesProvider extends ContentProvider {
         Model model = getModel(uri);
         if (model == null) return null;
         int code = mUriMatcher.match(uri);
-        switch (code) {
-            case UriMatcher.NO_MATCH:
-                break;
-            default:
-                insert(getContext(), values, model);
-                break;
+        if (code == STRING_CONTENT_URI_CODE || code == INTEGER_CONTENT_URI_CODE || code == LONG_CONTENT_URI_CODE
+                || code == FLOAT_CONTENT_URI_CODE || code == BOOLEAN_CONTENT_URI_CODE || code == PUTS_CONTENT_URI_CODE) {
+            insert(getContext(), values, model);
         }
         return uri;
     }
@@ -137,13 +135,11 @@ public abstract class PreferencesProvider extends ContentProvider {
         Model model = getModel(uri);
         if (model == null) return -1;
         int code = mUriMatcher.match(uri);
-        switch (code) {
-            case UriMatcher.NO_MATCH:
-                break;
-            default:
-                delete(getContext(), model);
-                break;
+        if (code == STRING_CONTENT_URI_CODE || code == INTEGER_CONTENT_URI_CODE || code == LONG_CONTENT_URI_CODE
+                || code == FLOAT_CONTENT_URI_CODE || code == BOOLEAN_CONTENT_URI_CODE) {
+            delete(getContext(), model);
         }
+
         return 0;
     }
 
@@ -152,12 +148,9 @@ public abstract class PreferencesProvider extends ContentProvider {
         Model model = getModel(uri);
         if (model == null) return -1;
         int code = mUriMatcher.match(uri);
-        switch (code) {
-            case UriMatcher.NO_MATCH:
-                break;
-            default:
-                insert(getContext(), values, model);
-                break;
+        if (code == STRING_CONTENT_URI_CODE || code == INTEGER_CONTENT_URI_CODE || code == LONG_CONTENT_URI_CODE
+                || code == FLOAT_CONTENT_URI_CODE || code == BOOLEAN_CONTENT_URI_CODE) {
+            insert(getContext(), values, model);
         }
         return 0;
     }
@@ -264,6 +257,7 @@ public abstract class PreferencesProvider extends ContentProvider {
             default:
                 break;
         }
+        if (value == null) return null;
         //
         String[] columnNames = {COLUMNNAME};
         MatrixCursor cursor = new MatrixCursor(columnNames);

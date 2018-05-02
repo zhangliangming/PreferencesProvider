@@ -332,6 +332,25 @@ public abstract class PreferencesProviderUtils {
     }
 
     /**
+     * @param context
+     * @param spName
+     * @param datas
+     * @return
+     */
+    public static boolean put(Context context, String spName, ContentValues datas) {
+        Uri uri = buildUri(context, PreferencesProvider.PUTS_CONTENT_URI_CODE, spName, null, null);
+        ContentResolver cr = context.getContentResolver();
+        try {
+
+            cr.insert(uri, datas);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
      * @param code
      * @param key
      * @param value
@@ -384,6 +403,13 @@ public abstract class PreferencesProviderUtils {
 
                 break;
 
+            case PreferencesProvider.PUTS_CONTENT_URI_CODE:
+
+                uri = Uri
+                        .parse("content://" + authorities + "/" + "puts");
+
+
+                break;
 
             default:
                 break;

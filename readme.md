@@ -1,10 +1,17 @@
 # 简介 #
 之前项目使用了SharedPreferences来保存数据，然而项目修改为多进程后，SharedPreferences保存数据却出现了数据没有更新的问题，当然SharedPreferences设置了MODE_MULTI_PROCESS后可以使数据同步，不过官方已经废弃了原先的MODE_MULTI_PROCESS, 并且建议跨进程存取值还是用ContentProvider之类的更靠谱一些，由于ContentProvider提供了对底层数据存储方式的抽象，底层我们可以使用SQLite，MongoDB等等，当然也可以使用SharedPreferences来实现
 
+
+
+## v1.2 ##
+- 2018-05-02
+- 添加put多个key和value接口
+
+
 ## v1.0 ##
 
 
-- 2018-04=30
+- 2018-04-30
 - ContentProvider封装SharedPreferences功能，解决跨进程存取值的问题
 
 # Gradle #
@@ -20,7 +27,7 @@
 2.app build.gradle
 
 `dependencies {
-	         compile 'com.github.zhangliangming:PreferencesProvider:v1.1'
+	         compile 'com.github.zhangliangming:PreferencesProvider:v1.2'
 	}`
 
 # 调用Demo #
