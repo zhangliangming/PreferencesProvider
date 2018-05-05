@@ -11,7 +11,7 @@ import android.net.Uri;
  * @author: zhangliangming
  * @date: 2018-04-29 19:07
  **/
-public abstract class PreferencesProviderUtils {
+public class PreferencesProviderUtils {
 
     /**
      * put string preferences
